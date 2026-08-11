@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aurelio Care - Plataforma de Acompañamiento T21</title>
+  <title>Aurelio Care & Autonomy Platform - Sistema Integral T21</title>
 
-  <!-- Tailwind CSS -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- React 18 & ReactDOM -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
@@ -17,80 +17,83 @@
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
     body {
       font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-      background-color: #F8FAFC;
+      background-color: #0F172A;
+      color: #F8FAFC;
     }
     .custom-scrollbar::-webkit-scrollbar {
       width: 6px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #CBD5E1;
+      background: #334155;
       border-radius: 4px;
     }
   </style>
 </head>
-<body class="text-slate-800 antialiased selection:bg-purple-100 selection:text-purple-900">
+<body class="antialiased selection:bg-purple-600 selection:text-white">
 
   <div id="root"></div>
 
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    function AurelioCareApp() {
+    function AurelioApp() {
       const [activeTab, setActiveTab] = useState('home');
       const [sidebarOpen, setSidebarOpen] = useState(true);
       const [mensajeVoz, setMensajeVoz] = useState('');
-      const [copiado, setCopiado] = useState(false);
-      const [mostrarCeleb, setMostrarCeleb] = useState(false);
-      const [textoCeleb, setTextoCeleb] = useState('');
+      const [copiadoLegal, setCopiadoLegal] = useState(false);
+      const [copiadoInforme, setCopiadoInforme] = useState(false);
+      const [mostrarMensajeModal, setMostrarMensajeModal] = useState(false);
+      const [textoModal, setTextoModal] = useState('');
 
-      // Datos de Perfil (Personalización)
+      // Perfil del Usuario y la Persona
       const [perfil, setPerfil] = useState(() => {
-        const p = localStorage.getItem('aurelio_care_perfil');
-        return p ? JSON.parse(p) : { nombreHijo: 'Aurelio', nombreCuidador: 'Mamá / Papá' };
-      });
-
-      useEffect(() => {
-        localStorage.setItem('aurelio_care_perfil', JSON.stringify(perfil));
-      }, [perfil]);
-
-      // Bitácora Diaria
-      const [registros, setRegistros] = useState(() => {
-        const guardados = localStorage.getItem('aurelio_care_bitacora');
-        return guardados ? JSON.parse(guardados) : [
-          { id: 1, fecha: 'Hoy, 09:30 AM', categoria: 'Observación Física', nota: 'Pancita algo abultada y durita por la mañana. En el baño se usó el vertido gradual y se mantuvo tranquilo.' },
-          { id: 2, fecha: 'Ayer, 04:00 PM', categoria: 'Comunicación', nota: 'Practicamos la seña de "MÁS" durante la comida. Hizo contacto visual directo.' }
-        ];
-      });
-
-      const [nuevaNota, setNuevaNota] = useState('');
-      const [catNuevaNota, setCatNuevaNota] = useState('Observación Física');
-
-      useEffect(() => {
-        localStorage.setItem('aurelio_care_bitacora', JSON.stringify(registros));
-      }, [registros]);
-
-      // Mapa de Pasos (Hitos sin edad)
-      const [pasosEstado, setPasosEstado] = useState(() => {
-        const p = localStorage.getItem('aurelio_care_pasos');
-        return p ? JSON.parse(p) : {
-          'mg_1': 'Consolidado',
-          'mg_2': 'Practicando',
-          'mg_3': 'En preparación',
-          'mf_1': 'Consolidado',
-          'mf_2': 'Practicando',
-          'or_1': 'Consolidado',
-          'or_2': 'Practicando',
-          'cm_1': 'Consolidado',
-          'cm_2': 'Practicando'
+        const p = localStorage.getItem('aurelio_plataforma_perfil');
+        return p ? JSON.parse(p) : { 
+          nombrePersona: 'Aurelio', 
+          nombreAcompanante: 'Familia / Acompañante',
+          etapa: 'Infancia y Desarrollo Inicial' 
         };
       });
 
       useEffect(() => {
-        localStorage.setItem('aurelio_care_pasos', JSON.stringify(pasosEstado));
-      }, [pasosEstado]);
+        localStorage.setItem('aurelio_plataforma_perfil', JSON.stringify(perfil));
+      }, [perfil]);
 
-      // Motor de Sintesis de Voz
-      const hablar = (texto) => {
+      // Bitácora Diaria y Registros
+      const [registros, setRegistros] = useState(() => {
+        const r = localStorage.getItem('aurelio_plataforma_bitacora');
+        return r ? JSON.parse(r) : [
+          { id: 1, fecha: 'Hoy, 09:15 AM', categoria: 'Observación Física', nota: 'Tono abdominal firme por la mañana. En la higiene se utilizó la tina con vertido gradual y recipientes de agua tibia; se mantuvo en total calma y sin llanto.' },
+          { id: 2, fecha: 'Ayer, 05:30 PM', categoria: 'Autonomía Adulta / Habilidades', nota: 'Participó activamente en la elección de su ropa y en el vertido de líquidos de jarra a vaso con apoyo visual.' }
+        ];
+      });
+
+      const [nuevaNota, setNuevaNota] = useState('');
+      const [catNota, setCatNota] = useState('Observación Física');
+
+      useEffect(() => {
+        localStorage.setItem('aurelio_plataforma_bitacora', JSON.stringify(registros));
+      }, [registros]);
+
+      // Pasos del Desarrollo y Autonomía
+      const [pasos, setPasos] = useState(() => {
+        const p = localStorage.getItem('aurelio_plataforma_pasos');
+        return p ? JSON.parse(p) : {
+          'mg_1': 'Consolidado', 'mg_2': 'Practicando', 'mg_3': 'En preparación',
+          'mf_1': 'Consolidado', 'mf_2': 'Practicando', 'mf_3': 'En preparación',
+          'or_1': 'Consolidado', 'or_2': 'Practicando', 'or_3': 'En preparación',
+          'lg_1': 'Consolidado', 'lg_2': 'Practicando', 'lg_3': 'Practicando',
+          'au_1': 'Practicando', 'au_2': 'En preparación', 'au_3': 'En preparación',
+          'ad_1': 'Practicando', 'ad_2': 'En preparación', 'ad_3': 'En preparación'
+        };
+      });
+
+      useEffect(() => {
+        localStorage.setItem('aurelio_plataforma_pasos', JSON.stringify(pasos));
+      }, [pasos]);
+
+      // Sintesis de Voz (SAAC)
+      const reproducirVoz = (texto) => {
         setMensajeVoz(texto);
         if ('speechSynthesis' in window) {
           window.speechSynthesis.cancel();
@@ -100,232 +103,314 @@
           utterance.pitch = 1.0;
           window.speechSynthesis.speak(utterance);
         }
-        setTimeout(() => setMensajeVoz(''), 3000);
+        setTimeout(() => setMensajeVoz(''), 3500);
       };
 
-      const agregarBitacora = (e) => {
+      const guardarNota = (e) => {
         e.preventDefault();
         if (!nuevaNota.trim()) return;
-        const nuevo = {
+        const registro = {
           id: Date.now(),
           fecha: new Date().toLocaleDateString('es-MX', { hour: '2-digit', minute: '2-digit' }),
-          categoria: catNuevaNota,
+          categoria: catNota,
           nota: nuevaNota
         };
-        setRegistros([nuevo, ...registros]);
+        setRegistros([registro, ...registros]);
         setNuevaNota('');
-        activarCelebracion(`¡Nota guardada! Tu dedicación en observar cada detalle es un acto de amor enorme para ${perfil.nombreHijo}. Lo estás haciendo genial, ${perfil.nombreCuidador}.`);
+        lanzarModal(`Observación registrada correctamente. Cada detalle anotado fortalece el conocimiento continuo de ${perfil.nombrePersona}.`);
       };
 
-      const cambiarEstadoPaso = (id, nuevoEstado) => {
-        setPasosEstado({ ...pasosEstado, [id]: nuevoEstado });
+      const actualizarPaso = (id, nuevoEstado) => {
+        setPasos({ ...pasos, [id]: nuevoEstado });
         if (nuevoEstado === 'Consolidado') {
-          activarCelebracion(`¡Un paso más consolidado! Tu paciencia y acompañamiento diario están dando frutos en el camino de ${perfil.nombreHijo}. ¡Felicidades!`);
+          lanzarModal(`¡Paso consolidado! El aprendizaje cualitativo y sin presiones de tiempo es la clave del desarrollo autónomo de ${perfil.nombrePersona}.`);
         }
       };
 
-      const activarCelebracion = (mensaje) => {
-        setTextoCeleb(mensaje);
-        setMostrarCeleb(true);
+      const lanzarModal = (msg) => {
+        setTextoModal(msg);
+        setMostrarMensajeModal(true);
       };
 
-      const copiarSolicitudLegal = () => {
-        const textoLegal = `ASUNTO: Solicitud Formal de Ajustes Razonables
-MARCO LEGAL: Artículos 61, 64 y 65 de la Ley General de Educación (México)
+      const copiarTexto = (texto, tipo) => {
+        navigator.clipboard?.writeText(texto);
+        if (tipo === 'legal') {
+          setCopiadoLegal(true);
+          setTimeout(() => setCopiadoLegal(false), 2500);
+        } else {
+          setCopiadoInforme(true);
+          setTimeout(() => setCopiadoInforme(false), 2500);
+        }
+      };
 
-A la Dirección de la Institución Educativa / Coordinación USAER:
+      // Generación de Texto Legal
+      const textoCartaLegal = `SOLICITUD FORMAL DE AJUSTES RAZONABLES Y APOYOS
+Fundamento: Convención sobre los Derechos de las Personas con Discapacidad (Arts. 19, 24, 27) y Ley General de Educación de México (Arts. 61, 64, 65).
 
-Por medio de la presente, en mi calidad de tutor legal del alumno ${perfil.nombreHijo} (Diagnóstico: Trisomía 21 / Síndrome de Down), me dirijo a ustedes para solicitar formalmente la instrumentación de los AJUSTES RAZONABLES pertinentes en su entorno de aprendizaje.
+A quien corresponda (Institución Educativa, Centro Ocupacional o Entidad Comunitaria):
 
-Ajustes Sugeridos:
-1. Implementación de apoyos visuales y Comunicación Aumentativa (SAAC/Pictogramas).
-2. Anticipación estructurada en transiciones de actividades.
-3. Respeto al perfil de procesamiento sensorial (evitar estímulos auditivos o táctiles bruscos sin preparación previa).
+Por medio de la presente, en representación de ${perfil.nombrePersona} (Persona con Trisomía 21 / Síndrome de Down), solicito formalmente la implementación de los siguientes AJUSTES RAZONABLES para garantizar su participación plena, segura y autónoma:
+
+1. Apoyos Visuales y SAAC: Tableros de anticipación visual y uso de pictogramas/señas en instrucciones complejas.
+2. Procesamiento Sensorial: Adaptación de ambientes con alta carga auditiva o táctil, permitiendo pausar o autorregularse.
+3. Fomento de la Autodeterminación: Respeto a sus decisiones, tiempo de respuesta extendido y canales claros de expresión.
 
 Atentamente,
-Familia de ${perfil.nombreHijo}`;
+${perfil.nombreAcompanante} - En acompañamiento a ${perfil.nombrePersona}`;
 
-        navigator.clipboard?.writeText(textoLegal);
-        setCopiado(true);
-        setTimeout(() => setCopiado(false), 2500);
-      };
+      // Generación de Informe para Especialistas
+      const textoInformeEspecialista = `INFORME INTEGRAL DE SEGUIMIENTO Y OBSERVACIÓN
+Persona: ${perfil.nombrePersona} | Acompañante: ${perfil.nombreAcompanante}
+Fecha de Emisión: ${new Date().toLocaleDateString('es-MX')}
+
+RESUMEN DE OBSERVACIONES CUALITATIVAS RECIENTES:
+${registros.map(r => `- [${r.categoria}] (${r.fecha}): ${r.nota}`).join('\n')}
+
+ESTADO ACTUAL EN MAPA DE AUTONOMÍA Y DESARROLLO:
+- Marcha / Motor Grueso: Paso 1 (${pasos.mg_1}), Paso 2 (${pasos.mg_2})
+- Orofacial y Masticación: Paso 1 (${pasos.or_1}), Paso 2 (${pasos.or_2})
+- Comunicación y Expresión: Paso 1 (${pasos.lg_1}), Paso 2 (${pasos.lg_2})
+- Autonomía e Independencia: Paso 1 (${pasos.au_1}), Paso 2 (${pasos.au_2})`;
 
       return (
-        <div className="min-h-screen flex bg-slate-100">
-          
-          {/* BARRA LATERAL / NAVEGACIÓN PRINCIPAL */}
-          <aside className={`bg-slate-900 text-slate-300 w-64 fixed inset-y-0 left-0 z-30 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-200 ease-in-out flex flex-col justify-between shadow-xl`}>
-            <div>
-              {/* LOGO & ENCABEZADO */}
-              <div className="p-5 border-b border-slate-800 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center text-white font-extrabold text-lg shadow-md">
-                  {perfil.nombreHijo ? perfil.nombreHijo.charAt(0) : 'A'}
-                </div>
-                <div>
-                  <h1 className="font-extrabold text-base text-white tracking-tight">Aurelio Care</h1>
-                  <p className="text-xs text-purple-400 font-medium">Acompañamiento T21</p>
+        <div className="min-h-screen flex bg-slate-950 text-slate-100">
+
+          {/* BARRA LATERAL NAVEGACIÓN */}
+          <aside className={`bg-slate-900 border-r border-slate-800 w-72 fixed inset-y-0 left-0 z-30 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-200 ease-in-out flex flex-col justify-between shadow-2xl`}>
+            <div className="custom-scrollbar overflow-y-auto">
+              
+              {/* BRANDING */}
+              <div className="p-6 border-b border-slate-800/80 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-purple-900/40">
+                    {perfil.nombrePersona ? perfil.nombrePersona.charAt(0) : 'A'}
+                  </div>
+                  <div>
+                    <h1 className="font-extrabold text-sm text-white tracking-tight">Aurelio Care</h1>
+                    <p className="text-[11px] text-purple-400 font-semibold uppercase tracking-wider">Desarrollo & Autonomía</p>
+                  </div>
                 </div>
               </div>
 
-              {/* MENÚ DE NAVEGACIÓN */}
-              <nav className="p-3 space-y-1">
+              {/* OPCIONES DE MENÚ */}
+              <nav className="p-4 space-y-1.5">
                 {[
-                  { id: 'home', icon: '🏠', label: 'Inicio / Dashboard' },
-                  { id: 'observacion', icon: '🔍', label: 'Observación Física' },
-                  { id: 'pasos', icon: '🌱', label: 'Mapa de Pasos (Sin edad)' },
-                  { id: 'comunicador', icon: '🗣️', label: 'Comunicador & Gestos' },
-                  { id: 'bitacora', icon: '📝', label: 'Bitácora e Informes' },
-                  { id: 'legal', icon: '⚖️', label: 'Marco Legal & Perfil' }
+                  { id: 'home', icon: '💎', label: 'Panorama Holístico' },
+                  { id: 'independencia', icon: '🚀', label: 'Vida Adulta e Independencia', badge: 'Pilar Clave' },
+                  { id: 'observacion', icon: '🔍', label: 'Observación Clínica (6 Áreas)' },
+                  { id: 'pasos', icon: '🌱', label: 'Mapa Cualitativo de Pasos' },
+                  { id: 'estrategias', icon: '💡', label: 'Guía de Actividades y Juegos' },
+                  { id: 'comunicador', icon: '🗣️', label: 'Comunicador SAAC & Señas' },
+                  { id: 'bitacora', icon: '📝', label: 'Bitácora & Informe Clínico' },
+                  { id: 'legal', icon: '⚖️', label: 'Marco Legal & Configuración' }
                 ].map((item) => (
                   <button
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className={`w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-bold transition ${activeTab === item.id ? 'bg-purple-600 text-white shadow-md' : 'hover:bg-slate-800 text-slate-400 hover:text-slate-200'}`}
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-bold transition-all duration-150 ${activeTab === item.id ? 'bg-purple-600 text-white shadow-lg shadow-purple-900/40 border border-purple-500/50' : 'hover:bg-slate-800/80 text-slate-400 hover:text-slate-200'}`}
                   >
-                    <span className="text-base">{item.icon}</span>
-                    <span>{item.label}</span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-base">{item.icon}</span>
+                      <span className="text-left">{item.label}</span>
+                    </div>
+                    {item.badge && (
+                      <span className="text-[9px] bg-purple-950 text-purple-300 font-extrabold px-2 py-0.5 rounded-full border border-purple-800">
+                        {item.badge}
+                      </span>
+                    )}
                   </button>
                 ))}
               </nav>
             </div>
 
-            {/* PERFIL RESUMIDO EN LA BASE */}
-            <div className="p-4 border-t border-slate-800 bg-slate-950/50">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs">
-                  👤
+            {/* CUIDADOR/ACOMPAÑANTE FOOTER */}
+            <div className="p-4 border-t border-slate-800/80 bg-slate-950/80">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-xs text-purple-300 font-bold">
+                  {perfil.nombreAcompanante ? perfil.nombreAcompanante.charAt(0) : 'A'}
                 </div>
                 <div className="overflow-hidden">
-                  <p className="text-xs font-bold text-white truncate">{perfil.nombreCuidador}</p>
-                  <p className="text-[10px] text-slate-400 truncate">Cuidador de {perfil.nombreHijo}</p>
+                  <p className="text-xs font-bold text-slate-200 truncate">{perfil.nombreAcompanante}</p>
+                  <p className="text-[10px] text-slate-400 truncate">Acompañando a {perfil.nombrePersona}</p>
                 </div>
               </div>
             </div>
           </aside>
 
           {/* CONTENIDO PRINCIPAL */}
-          <div className="flex-1 md:ml-64 flex flex-col min-h-screen">
-            
-            {/* BARRA SUPERIOR DE ACCIONES */}
-            <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-20 shadow-xs">
+          <div className="flex-1 md:ml-72 flex flex-col min-h-screen">
+
+            {/* HEADER SUPERIOR */}
+            <header className="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-20">
               <div className="flex items-center gap-3">
                 <button 
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="md:hidden p-2 rounded-lg bg-slate-100 text-slate-600 font-bold text-sm"
+                  className="md:hidden p-2 rounded-xl bg-slate-800 text-slate-300 font-bold text-sm"
                 >
                   ☰
                 </button>
-                <h2 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider">
-                  {activeTab === 'home' && 'Inicio y Panorama General'}
-                  {activeTab === 'observacion' && 'Observación Física y Sensorial'}
-                  {activeTab === 'pasos' && 'Mapa de Progreso por Pasos (Sin Edad)'}
-                  {activeTab === 'comunicador' && 'Comunicación Aumentativa y Baby Signs'}
-                  {activeTab === 'bitacora' && 'Bitácora Inteligente e Informes Semanales'}
-                  {activeTab === 'legal' && 'Resguardo Legal y Perfil'}
+                <h2 className="text-xs font-extrabold text-slate-300 uppercase tracking-widest">
+                  {activeTab === 'home' && 'Panorama Holístico y Resumen'}
+                  {activeTab === 'independencia' && 'Vida Adulta, Autonomía e Inclusión Comunitaria'}
+                  {activeTab === 'observacion' && 'Observación Clínica y Sensorial (6 Dimensiones)'}
+                  {activeTab === 'pasos' && 'Mapa Cualitativo del Desarrollo y Autonomía'}
+                  {activeTab === 'estrategias' && 'Guía Práctica de Actividades y Dinámicas Cotidianas'}
+                  {activeTab === 'comunicador' && 'Comunicador SAAC Interactiva y Señas Puente'}
+                  {activeTab === 'bitacora' && 'Bitácora e Informe de Seguimiento Profesional'}
+                  {activeTab === 'legal' && 'Marco Legal, Derechos y Configuración'}
                 </h2>
               </div>
 
               <button 
-                onClick={() => hablar(`Hola ${perfil.nombreCuidador}, el sistema de voz de Aurelio Care está funcionando correctamente.`)}
-                className="px-3.5 py-2 bg-purple-50 hover:bg-purple-100 text-purple-800 rounded-xl text-xs font-bold transition flex items-center gap-2 border border-purple-200"
+                onClick={() => reproducirVoz(`Asistente de voz activo para ${perfil.nombrePersona}.`)}
+                className="px-3.5 py-1.5 bg-purple-950 hover:bg-purple-900 text-purple-200 rounded-xl text-xs font-bold transition flex items-center gap-2 border border-purple-800/60"
               >
-                🔊 Probar Voz
+                🔊 Voz Sintética
               </button>
             </header>
 
-            {/* ALERTA DE VOZ ACTIVA */}
+            {/* REPRODUCTOR DE VOZ ALERTA */}
             {mensajeVoz && (
-              <div className="bg-purple-900 text-white px-6 py-2.5 text-center text-xs font-bold animate-pulse flex items-center justify-center gap-2">
+              <div className="bg-gradient-to-r from-purple-900 to-indigo-900 text-purple-100 px-6 py-2.5 text-center text-xs font-bold animate-pulse flex items-center justify-center gap-2 border-b border-purple-700">
                 <span>🗣️ Reproduciendo mensaje:</span>
                 <span className="italic">"{mensajeVoz}"</span>
               </div>
             )}
 
-            {/* MODAL DE CELEBRACIÓN Y APOYO EMOCIONAL */}
-            {mostrarCeleb && (
-              <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-                <div className="bg-white rounded-3xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl border border-purple-100">
-                  <div className="text-5xl">🌟</div>
-                  <h3 className="font-extrabold text-slate-900 text-base">¡Un recordatorio especial!</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">{textoCeleb}</p>
+            {/* MODAL DE MENSAJE POSITIVO */}
+            {mostrarMensajeModal && (
+              <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+                <div className="bg-slate-900 rounded-3xl p-6 max-w-sm w-full text-center space-y-4 border border-purple-500/30 shadow-2xl">
+                  <div className="text-5xl">🌱</div>
+                  <h3 className="font-extrabold text-white text-base">Acompañamiento Respetuoso</h3>
+                  <p className="text-xs text-slate-300 leading-relaxed">{textoModal}</p>
                   <button 
-                    onClick={() => setMostrarCeleb(false)}
-                    className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs transition"
+                    onClick={() => setMostrarMensajeModal(false)}
+                    className="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs transition shadow-lg shadow-purple-900/50"
                   >
-                    Entendido
+                    Aceptar y Continuar
                   </button>
                 </div>
               </div>
             )}
 
-            {/* ÁREA DE CONTENIDO DINÁMICO */}
-            <main className="p-6 max-w-5xl w-full mx-auto space-y-6 flex-1">
+            {/* CONTENIDOS DINÁMICOS POR PESTAÑA */}
+            <main className="p-6 max-w-6xl w-full mx-auto space-y-6 flex-1">
 
-              {/* 1. HOME / DASHBOARD */}
+              {/* 1. HOME / PANORAMA HOLÍSTICO */}
               {activeTab === 'home' && (
                 <div className="space-y-6">
 
-                  {/* BANNER DE BIENVENIDA Y SOSTEN EMOCIONAL */}
-                  <div className="bg-gradient-to-r from-purple-700 via-indigo-700 to-slate-900 rounded-3xl p-6 text-white shadow-lg space-y-3">
-                    <div className="inline-block bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider text-purple-200">
-                      Refugio de Acompañamiento
+                  {/* HERO BANNER */}
+                  <div className="bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 rounded-3xl p-8 border border-purple-800/40 shadow-2xl space-y-4">
+                    <div className="inline-block bg-purple-900/60 text-purple-300 px-3.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest border border-purple-700/50">
+                      Plataforma Integral de Vida y Autonomía T21
                     </div>
-                    <h1 className="text-xl font-extrabold">Bienvenido/a, {perfil.nombreCuidador}</h1>
-                    <p className="text-xs text-purple-100 max-w-2xl leading-relaxed">
-                      Cuidar, observar y acompañar a {perfil.nombreHijo} exige un esfuerzo tremendo. Aquí no estás a solas: cuentas con una guía clara para registrar su evolución, sin comparaciones ni presiones de tiempo.
+                    <h1 className="text-2xl font-extrabold text-white tracking-tight">
+                      Acompañando a {perfil.nombrePersona} con dignidad y visión de futuro
+                    </h1>
+                    <p className="text-xs text-slate-300 leading-relaxed max-w-3xl">
+                      El desarrollo de una persona con Trisomía 21 abarca todo su ciclo vital. Esta plataforma articula desde la observación clínica cuidadosa y la estimulación orofacial en las primeras etapas, hasta el fomento de la autodeterminación, la inclusión laboral y la vida independiente en la juventud y adultez.
                     </p>
                   </div>
 
-                  {/* TARJETA DE AVISO DE SEGURIDAD E INTEGRIDAD FÍSICA */}
-                  <div className="bg-rose-50 border border-rose-200/80 rounded-2xl p-4 flex gap-3 items-start">
-                    <div className="text-xl">⚠️</div>
+                  {/* AVISO DE RESGUARDO Y SALUD */}
+                  <div className="bg-amber-950/40 border border-amber-800/60 rounded-2xl p-5 flex gap-4 items-start">
+                    <div className="text-2xl">🛡️</div>
                     <div className="space-y-1">
-                      <h4 className="font-bold text-xs text-rose-900">Prioridad en la Seguridad de {perfil.nombreHijo}</h4>
-                      <p className="text-xs text-rose-800 leading-relaxed">
-                        Cada sugerencia o actividad debe ser respetuosa con la comodidad e integridad física del niño. Si notas molestia, llanto o resistencia, suspende la dinámica y consúltala con su pediatra o especialista de cabecera.
+                      <h4 className="font-extrabold text-xs text-amber-200 uppercase tracking-wider">Criterio de Seguridad y Respeto Corporal</h4>
+                      <p className="text-xs text-amber-300/90 leading-relaxed">
+                        Ninguna dinámica, ejercicio físico o estrategia de estimulación debe forzarse. El dolor, el rechazo o el llanto son señales explícitas de autorregulación que deben ser respetadas. Todo ajuste motor o digestivo requiere valoración del equipo médico o terapeuta tratante.
                       </p>
                     </div>
                   </div>
 
-                  {/* TARJETAS DE ACCESO RÁPIDO */}
+                  {/* MATRIZ DE MÓDULOS CLAVE */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     
-                    <div 
-                      onClick={() => setActiveTab('observacion')}
-                      className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-purple-300 shadow-xs cursor-pointer transition space-y-2 group"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold text-lg group-hover:scale-110 transition">
-                        🔍
+                    <div onClick={() => setActiveTab('independencia')} className="bg-slate-900 p-6 rounded-2xl border border-slate-800 hover:border-purple-500/50 cursor-pointer transition-all duration-200 space-y-3 group shadow-lg">
+                      <div className="w-12 h-12 rounded-2xl bg-purple-950 text-purple-300 flex items-center justify-center font-bold text-xl border border-purple-800 group-hover:scale-105 transition">🚀</div>
+                      <h3 className="font-extrabold text-sm text-white">Vida Adulta e Independencia</h3>
+                      <p className="text-xs text-slate-400 leading-relaxed">Autodeterminación, habilidades domésticas, uso de dinero, transporte e inclusión laboral.</p>
+                    </div>
+
+                    <div onClick={() => setActiveTab('observacion')} className="bg-slate-900 p-6 rounded-2xl border border-slate-800 hover:border-amber-500/50 cursor-pointer transition-all duration-200 space-y-3 group shadow-lg">
+                      <div className="w-12 h-12 rounded-2xl bg-amber-950 text-amber-300 flex items-center justify-center font-bold text-xl border border-amber-800 group-hover:scale-105 transition">🔍</div>
+                      <h3 className="font-extrabold text-sm text-white">Observación Clínica (6 Áreas)</h3>
+                      <p className="text-xs text-slate-400 leading-relaxed">Análisis de la firmeza de pancita, orofacial, audición, visión, postura y procesamiento sensorial.</p>
+                    </div>
+
+                    <div onClick={() => setActiveTab('comunicador')} className="bg-slate-900 p-6 rounded-2xl border border-slate-800 hover:border-emerald-500/50 cursor-pointer transition-all duration-200 space-y-3 group shadow-lg">
+                      <div className="w-12 h-12 rounded-2xl bg-emerald-950 text-emerald-300 flex items-center justify-center font-bold text-xl border border-emerald-800 group-hover:scale-105 transition">🗣️</div>
+                      <h3 className="font-extrabold text-sm text-white">Ecosistema SAAC & Señas</h3>
+                      <p className="text-xs text-slate-400 leading-relaxed">Tablero de voz sintética interactivo y biblioteca de señas puente para reducir frustración.</p>
+                    </div>
+
+                  </div>
+
+                </div>
+              )}
+
+              {/* 2. VIDA ADULTA, AUTONOMÍA E INCLUSIÓN (PILAR CLAVE) */}
+              {activeTab === 'independencia' && (
+                <div className="space-y-6">
+
+                  <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-2">
+                    <span className="bg-purple-950 text-purple-300 text-[10px] font-extrabold px-3 py-1 rounded-full border border-purple-800 uppercase tracking-widest">
+                      Estrategia de Proyecto de Vida
+                    </span>
+                    <h2 className="font-extrabold text-lg text-white">Hacia la Autonomía e Independencia en la Vida Adulta</h2>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      El objetivo fundamental del acompañamiento es que {perfil.nombrePersona} desarrolle el mayor grado posible de autogestión, dignidad e independencia. La autonomía no es "hacer todo solo", sino tener el poder de decidir sobre la propia vida con los apoyos necesarios.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                    {/* Autodeterminación */}
+                    <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3 shadow-lg">
+                      <span className="font-extrabold text-xs text-purple-300 bg-purple-950 px-3 py-1 rounded-full border border-purple-800 inline-block">
+                        🎯 1. Autodeterminación y Capacidad de Elección
+                      </span>
+                      <h3 className="font-bold text-sm text-white">Elección cotidiana y respeto a la negativa</h3>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        Fomentar activamente que {perfil.nombrePersona} elija su vestimenta, sus actividades de ocio y sus alimentos. Enseñar y validar el uso del "NO" como herramienta de protección corporal y autodeterminación.
+                      </p>
+                      <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-400">
+                        💡 <strong>Práctica:</strong> Ofrecer dos opciones claras ("¿Prefieres la camisa azul o la verde?") mediante objetos reales o pictogramas antes de imponer una prenda.
                       </div>
-                      <h3 className="font-extrabold text-sm text-slate-800">Observación Física</h3>
-                      <p className="text-xs text-slate-500 leading-relaxed">
-                        Monitorea pancita, boca, oídos y postura en lenguaje claro sin tecnicismos pesados.
+                    </div>
+
+                    {/* Autonomía Doméstica */}
+                    <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3 shadow-lg">
+                      <span className="font-extrabold text-xs text-emerald-300 bg-emerald-950 px-3 py-1 rounded-full border border-emerald-800 inline-block">
+                        🏡 2. Habilidades para la Vida Doméstica
+                      </span>
+                      <h3 className="font-bold text-sm text-white">Cocina fría, orden y seguridad en casa</h3>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        Secuencia paso a paso para la preparación de alimentos sencillos (sándwich, cereal con leche, ensalada fría), clasificación de ropa limpia y normas básicas de seguridad doméstica (uso de electrodomésticos).
                       </p>
                     </div>
 
-                    <div 
-                      onClick={() => setActiveTab('pasos')}
-                      className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-purple-300 shadow-xs cursor-pointer transition space-y-2 group"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center font-bold text-lg group-hover:scale-110 transition">
-                        🌱
-                      </div>
-                      <h3 className="font-extrabold text-sm text-slate-800">Mapa de Pasos (Sin Edad)</h3>
-                      <p className="text-xs text-slate-500 leading-relaxed">
-                        Acompaña la secuencia del desarrollo por escalones sin la presión de un calendario de meses.
+                    {/* Uso de Dinero y Movilidad */}
+                    <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3 shadow-lg">
+                      <span className="font-extrabold text-xs text-indigo-300 bg-indigo-950 px-3 py-1 rounded-full border border-indigo-800 inline-block">
+                        🚌 3. Movilidad y Manejo del Dinero
+                      </span>
+                      <h3 className="font-bold text-sm text-white">Transporte público y transacciones básicas</h3>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        Entrenamiento en trayectos seguros comunitarios (uso de mapas visuales, reconocimiento de paradas) y manejo simplificado de efectivo/tarjeta con apoyos visuales de equivalencia.
                       </p>
                     </div>
 
-                    <div 
-                      onClick={() => setActiveTab('bitacora')}
-                      className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-purple-300 shadow-xs cursor-pointer transition space-y-2 group"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-lg group-hover:scale-110 transition">
-                        📝
-                      </div>
-                      <h3 className="font-extrabold text-sm text-slate-800">Informes Semanales</h3>
-                      <p className="text-xs text-slate-500 leading-relaxed">
-                        Agrupa las notas de la semana listas para llevar a la consulta médica o terapéutica.
+                    {/* Inclusión Laboral */}
+                    <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3 shadow-lg">
+                      <span className="font-extrabold text-xs text-amber-300 bg-amber-950 px-3 py-1 rounded-full border border-amber-800 inline-block">
+                        💼 4. Inclusión Laboral con Apoyo
+                      </span>
+                      <h3 className="font-bold text-sm text-white">Empleo apoyado y habilidades vocacionales</h3>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        Identificación de competencias y fortalezas específicas. Metodología de Empleo con Apoyo (figura del preparador laboral) para la inserción en entornos laborales competitivos e inclusivos.
                       </p>
                     </div>
 
@@ -334,74 +419,76 @@ Familia de ${perfil.nombreHijo}`;
                 </div>
               )}
 
-              {/* 2. OBSERVACIÓN FÍSICA Y SENSORIAL */}
+              {/* 3. OBSERVACIÓN CLÍNICA Y FÍSICO-SENSORIAL (6 DIMENSIONES) */}
               {activeTab === 'observacion' && (
                 <div className="space-y-6">
-                  
-                  <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-2">
-                    <h2 className="font-extrabold text-base text-slate-900">Guía de Observación Clínica Cotidiana</h2>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Diseñada para identificar señales físicas o sensoriales clave en casa, traducidas a un lenguaje accesible para compartir objetivamente con el equipo médico.
+
+                  <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-2">
+                    <h2 className="font-extrabold text-base text-white">Guía de Observación Clínica Cotidiana (6 Dimensiones)</h2>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      Estructura descriptiva para registrar señales físicas y sensoriales en casa sin caer en diagnósticos improvisados, facilitando el diálogo objetivo con médicos especialistas.
                     </p>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     
                     {/* Pancita */}
-                    <div className="bg-white p-5 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-                      <div className="flex justify-between items-center">
-                        <span className="font-extrabold text-xs text-amber-900 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
-                          🥣 Pancita y Digestión
-                        </span>
-                      </div>
-                      <h3 className="font-bold text-sm text-slate-800">Observación de firmeza abdominal</h3>
-                      <p className="text-xs text-slate-600 leading-relaxed">
-                        ¿Sientes su panza abultada o dura al tacto? El tono muscular suave en la pared de su vientre y el tránsito lento pueden influir.
+                    <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-2 shadow-lg">
+                      <span className="font-extrabold text-xs text-amber-300 bg-amber-950 px-3 py-1 rounded-full border border-amber-800 inline-block">
+                        🥣 1. Pancita y Motilidad Digestiva
+                      </span>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        Observar la firmeza del abdomen al despertar. Debido a la hipotonía suave de la pared abdominal, es común el tránsito lento. Anotar frecuencia de evacuación y constancia.
                       </p>
-                      <div className="bg-amber-50/60 p-3 rounded-xl text-xs text-amber-950 border border-amber-100">
-                        💡 <strong>Para la consulta:</strong> Apuntar si la firmeza varía durante el día o si muestra molestia al tocarlo.
-                      </div>
                     </div>
 
                     {/* Orofacial */}
-                    <div className="bg-white p-5 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-                      <div className="flex justify-between items-center">
-                        <span className="font-extrabold text-xs text-teal-900 bg-teal-50 px-3 py-1 rounded-full border border-teal-200">
-                          👄 Boca y Lengua (Orofacial)
-                        </span>
-                      </div>
-                      <h3 className="font-bold text-sm text-slate-800">Sellado labial y masticación</h3>
-                      <p className="text-xs text-slate-600 leading-relaxed">
-                        ¿Mantiene los labios entreabiertos en reposo? ¿Hay escape de líquido al beber de un vaso?
-                      </p>
-                      <div className="bg-teal-50/60 p-3 rounded-xl text-xs text-teal-950 border border-teal-100">
-                        💡 <strong>Estrategia en casa:</strong> Usar vasos pequeños con borde suave y ofrecer texturas que ejerciten los músculos masticatorios.
-                      </div>
-                    </div>
-
-                    {/* Oídos */}
-                    <div className="bg-white p-5 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-                      <div className="flex justify-between items-center">
-                        <span className="font-extrabold text-xs text-blue-900 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
-                          👂 Oídos y Audición
-                        </span>
-                      </div>
-                      <h3 className="font-bold text-sm text-slate-800">Sensibilidad sonora y molestias</h3>
-                      <p className="text-xs text-slate-600 leading-relaxed">
-                        ¿Se toca la orejita con frecuencia? ¿Reacciona con molestia o susto exagerado ante ruidos fuertes repentinos?
+                    <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-2 shadow-lg">
+                      <span className="font-extrabold text-xs text-teal-300 bg-teal-950 px-3 py-1 rounded-full border border-teal-800 inline-block">
+                        👄 2. Estructura Orofacial y Masticación
+                      </span>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        Evaluar el sellado labial en reposo, el control de la saliva y el movimiento lateral de la lengua al procesar alimentos sólidos de textura segura.
                       </p>
                     </div>
 
-                    {/* Postura */}
-                    <div className="bg-white p-5 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-                      <div className="flex justify-between items-center">
-                        <span className="font-extrabold text-xs text-purple-900 bg-purple-50 px-3 py-1 rounded-full border border-purple-200">
-                          🦶 Postura y Apoyo
-                        </span>
-                      </div>
-                      <h3 className="font-bold text-sm text-slate-800">Alineación al ponerse de pie</h3>
-                      <p className="text-xs text-slate-600 leading-relaxed">
-                        ¿Separa mucho los pies para buscar estabilidad? ¿Observas que el tobillo se incline un poco hacia adentro?
+                    {/* Audición */}
+                    <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-2 shadow-lg">
+                      <span className="font-extrabold text-xs text-sky-300 bg-sky-950 px-3 py-1 rounded-full border border-sky-800 inline-block">
+                        👂 3. Audición y Procesamiento Sonoro
+                      </span>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        Detectar posible hipoacusia fluctuante por acumulación de fluido en oído medio (otitis serosa). Observar si responde a voz baja o si busca contacto visual constante para compensar.
+                      </p>
+                    </div>
+
+                    {/* Visión */}
+                    <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-2 shadow-lg">
+                      <span className="font-extrabold text-xs text-indigo-300 bg-indigo-950 px-3 py-1 rounded-full border border-indigo-800 inline-block">
+                        👁️ 4. Visión y Enfoque
+                      </span>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        Revisión de alineación ocular (descartar estrabismo leve) y seguimiento visual continuo en tareas interactivas o de lectura con pictogramas.
+                      </p>
+                    </div>
+
+                    {/* Musculoesquelético */}
+                    <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-2 shadow-lg">
+                      <span className="font-extrabold text-xs text-purple-300 bg-purple-950 px-3 py-1 rounded-full border border-purple-800 inline-block">
+                        🦶 5. Marcha, Tobillos y Postura
+                      </span>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        Evaluar la base de sustentación al caminar y si existe pronación (vencimiento interno) de los tobillos provocada por hiperlaxitud ligamentosa.
+                      </p>
+                    </div>
+
+                    {/* Sensorial */}
+                    <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-2 shadow-lg">
+                      <span className="font-extrabold text-xs text-rose-300 bg-rose-950 px-3 py-1 rounded-full border border-rose-800 inline-block">
+                        🌿 6. Procesamiento Sensorial y Calma
+                      </span>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        Registrar hiper o hipo-reactividad ante texturas complejas, etiquetas de ropa o ruidos imprevistos. Identificar qué estímulos le brindan autorregulación.
                       </p>
                     </div>
 
@@ -410,132 +497,179 @@ Familia de ${perfil.nombreHijo}`;
                 </div>
               )}
 
-              {/* 3. MAPA DE PASOS (HITOS SIN EDAD) */}
+              {/* 4. MAPA CUALITATIVO DE PASOS (SIN EDAD) */}
               {activeTab === 'pasos' && (
                 <div className="space-y-6">
 
-                  <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-2">
-                    <h2 className="font-extrabold text-base text-slate-900">Mapa de Progreso por Pasos (Sin Edad)</h2>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Basado en la evidencia científica del desarrollo T21, este módulo elimina las presiones de calendario para centrarse en la secuencia lógica de maduración.
+                  <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-2">
+                    <h2 className="font-extrabold text-base text-white">Mapa Cualitativo de Desarrollo e Independencia</h2>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      Secuencia progresiva de hitos sin tablas rígidas de edad. Los avances se registran cualitativamente respetando los tiempos propios de {perfil.nombrePersona}.
                     </p>
                   </div>
 
-                  {/* Motor Grueso */}
-                  <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-4 shadow-xs">
-                    <h3 className="font-extrabold text-sm text-purple-900 uppercase tracking-wider">1. Fuerza y Movimiento (Motor Grueso)</h3>
-                    
-                    <div className="space-y-3">
-                      {[
-                        { id: 'mg_1', titulo: 'Paso 1: Sostén Cefálico (Cabeza y Cuello)', desc: 'Mantiene la cabeza firme estando boca abajo o levantado en brazos.' },
-                        { id: 'mg_2', titulo: 'Paso 2: Sostén de Tronco (Sentado)', desc: 'Se mantiene erguido sentado con apoyo suave de cojines o tus manos.' },
-                        { id: 'mg_3', titulo: 'Paso 3: Desplazamiento por el Suelo', desc: 'Se gira, se arrastra o inicia el gateo para alcanzar objetos que le atraen.' }
-                      ].map((p) => (
-                        <div key={p.id} className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 flex flex-col md:flex-row md:items-center justify-between gap-3">
-                          <div>
-                            <strong className="text-xs font-bold text-slate-800 block">{p.titulo}</strong>
-                            <p className="text-xs text-slate-500">{p.desc}</p>
-                          </div>
-                          <div className="flex gap-2 text-xs">
-                            {['En preparación', 'Practicando', 'Consolidado'].map((est) => (
-                              <button
-                                key={est}
-                                onClick={() => cambiarEstadoPaso(p.id, est)}
-                                className={`px-3 py-1.5 rounded-xl font-bold transition ${pasosEstado[p.id] === est ? 'bg-purple-600 text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200'}`}
-                              >
-                                {est}
-                              </button>
-                            ))}
-                          </div>
+                  <div className="space-y-4">
+                    {[
+                      { idGroup: 'mg', titulo: '1. Motor Grueso y Equilibrio', items: [
+                        { id: 'mg_1', titulo: 'Control de Cabeza y Tronco', desc: 'Sostén erguido en posición sentada y control cefálico estable.' },
+                        { id: 'mg_2', titulo: 'Desplazamiento Autónomo', desc: 'Gateo, arrastre o marcha con apoyo para exploración del entorno.' },
+                        { id: 'mg_3', titulo: 'Marcha Libre y Escalones', desc: 'Marcha independiente y subida de peldaños con apoyo de barandal.' }
+                      ]},
+                      { idGroup: 'or', titulo: '2. Orofacial y Alimentación Funcional', items: [
+                        { id: 'or_1', titulo: 'Aceptación de Texturas Grumos', desc: 'Procesamiento de alimentos machacados sin reflejo de expulsión.' },
+                        { id: 'or_2', titulo: 'Masticación Lateral', desc: 'Uso de molares para triturar alimentos en bastón o trozos blandos.' },
+                        { id: 'or_3', titulo: 'Bebida en Vaso Abierto', desc: 'Sellado labial adecuado al tomar sorbos de un vaso adaptado.' }
+                      ]},
+                      { idGroup: 'lg', titulo: '3. Lenguaje y Expresión Intencional', items: [
+                        { id: 'lg_1', titulo: 'Contacto Visual y Gestos', desc: 'Uso de la mirada y señas básicas para solicitar o rechazar.' },
+                        { id: 'lg_2', titulo: 'Uso de SAAC / Señas Puente', desc: 'Combinación de pictogramas o señas para formar frases simples.' },
+                        { id: 'lg_3', titulo: 'Expresión Oral / Verbal', desc: 'Emisión de palabras claras o aproximaciones inteligibles.' }
+                      ]},
+                      { idGroup: 'au', titulo: '4. Autonomía Cotidiana y Vestido', items: [
+                        { id: 'au_1', titulo: 'Desvestido e Higiene Básica', desc: 'Retiro de prendas sencillas y lavado de manos guiado.' },
+                        { id: 'au_2', titulo: 'Vestido Independiente', desc: 'Colocación de prendas holgadas con apoyo visual de secuencia.' },
+                        { id: 'au_3', titulo: 'Rutina Nocturna y Orden', desc: 'Guardado de objetos personales antes de dormir.' }
+                      ]}
+                    ].map((grupo) => (
+                      <div key={grupo.idGroup} className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4 shadow-lg">
+                        <h3 className="font-extrabold text-xs text-purple-300 uppercase tracking-widest">{grupo.titulo}</h3>
+                        <div className="space-y-3">
+                          {grupo.items.map((p) => (
+                            <div key={p.id} className="p-4 rounded-xl border border-slate-800 bg-slate-950 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                              <div>
+                                <strong className="text-xs font-bold text-white block">{p.titulo}</strong>
+                                <p className="text-xs text-slate-400">{p.desc}</p>
+                              </div>
+                              <div className="flex gap-2 text-xs">
+                                {['En preparación', 'Practicando', 'Consolidado'].map((est) => (
+                                  <button key={est} onClick={() => actualizarPaso(p.id, est)} className={`px-3 py-1.5 rounded-xl font-bold transition-all ${pasos[p.id] === est ? 'bg-purple-600 text-white shadow-md' : 'bg-slate-900 text-slate-400 border border-slate-800'}`}>
+                                    {est}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Orofacial */}
-                  <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-4 shadow-xs">
-                    <h3 className="font-extrabold text-sm text-teal-900 uppercase tracking-wider">2. Maduración Orofacial y Alimentación</h3>
-                    
-                    <div className="space-y-3">
-                      {[
-                        { id: 'or_1', titulo: 'Paso 1: Deglución de Consistencias Suaves', desc: 'Traga purés suaves sin expulsar la comida con la lengua.' },
-                        { id: 'or_2', titulo: 'Paso 2: Masticación e Integración de Grumos', desc: 'Acepta alimentos machacados con tenedor realizando movimientos laterales suaves.' }
-                      ].map((p) => (
-                        <div key={p.id} className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 flex flex-col md:flex-row md:items-center justify-between gap-3">
-                          <div>
-                            <strong className="text-xs font-bold text-slate-800 block">{p.titulo}</strong>
-                            <p className="text-xs text-slate-500">{p.desc}</p>
-                          </div>
-                          <div className="flex gap-2 text-xs">
-                            {['En preparación', 'Practicando', 'Consolidado'].map((est) => (
-                              <button
-                                key={est}
-                                onClick={() => cambiarEstadoPaso(p.id, est)}
-                                className={`px-3 py-1.5 rounded-xl font-bold transition ${pasosEstado[p.id] === est ? 'bg-teal-600 text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200'}`}
-                              >
-                                {est}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
                   </div>
 
                 </div>
               )}
 
-              {/* 4. COMUNICADOR SAAC & BABY SIGNS */}
-              {activeTab === 'comunicador' && (
+              {/* 5. GUÍA DE ACTIVIDADES Y JUEGOS COTIDIANOS */}
+              {activeTab === 'estrategias' && (
                 <div className="space-y-6">
 
-                  <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-2">
-                    <h2 className="font-extrabold text-base text-slate-900">Comunicación Aumentativa e Intención Comunicativa</h2>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Usa los pictogramas interactivos para darle voz inmediata a las necesidades de {perfil.nombreHijo} o practica las señas puente para reducir la frustración.
+                  <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-2">
+                    <h2 className="font-extrabold text-base text-white">Guía Práctica de Actividades y Juegos Acompañados</h2>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      Estrategias metodológicas para situaciones complejas de la rutina diaria, higiene, alimentación y autorregulación.
                     </p>
                   </div>
 
-                  {/* Tablero SAAC */}
-                  <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-4 shadow-xs">
-                    <h3 className="font-extrabold text-xs text-slate-400 uppercase tracking-wider">Tablero Digital de Voz</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    {/* Transición del Baño Respetuoso */}
+                    <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-3 shadow-lg">
+                      <span className="font-extrabold text-xs text-sky-300 bg-sky-950 px-3 py-1 rounded-full border border-sky-800 inline-block">
+                        🛁 Transición del Baño (Sin Regadera Directa)
+                      </span>
+                      <h3 className="font-bold text-sm text-white">Rutina del Vertido Gradual</h3>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        Si el impacto del agua de la regadera genera sobrecarga auditiva o táctil, utiliza una tina con agua tibia. Permite que juegue a llenar y vaciar recipientes de plástico sobre sus piernas y hombros, dándole el control del estímulo.
+                      </p>
+                      <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-sky-300">
+                        ✨ <strong>Objetivo:</strong> Eliminación del estrés y el llanto durante la higiene personal.
+                      </div>
+                    </div>
+
+                    {/* Tonificación Orofacial */}
+                    <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-3 shadow-lg">
+                      <span className="font-extrabold text-xs text-teal-300 bg-teal-950 px-3 py-1 rounded-full border border-teal-800 inline-block">
+                        👄 Estimulación Orofacial y Masticación
+                      </span>
+                      <h3 className="font-bold text-sm text-white">Juegos de Soplo y Alimentos en Bastón</h3>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        Fomenta el sellado labial soplando burbujas de jabón o molinetes de viento. Ofrece zanahoria o pepino al vapor cortado en bastones largos para incentivar la masticación con molares.
+                      </p>
+                    </div>
+
+                    {/* Texturas y Propiocepción */}
+                    <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-3 shadow-lg md:col-span-2">
+                      <span className="font-extrabold text-xs text-purple-300 bg-purple-950 px-3 py-1 rounded-full border border-purple-800 inline-block">
+                        🌾 Exploración Sensorial y Apoyo Descalzo
+                      </span>
+                      <h3 className="font-bold text-sm text-white">Estimulación Plantar y Autorregulación</h3>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        Permite caminatas descalzo sobre cesped, alfombra, arena o fomi con texturas. La estimulación propioceptiva en las plantas de los pies fortalece los músculos del arco plantar, mejora el equilibrio y ofrece autorregulación emocional.
+                      </p>
+                    </div>
+
+                  </div>
+
+                </div>
+              )}
+
+              {/* 6. COMUNICADOR SAAC & BABY SIGNS */}
+              {activeTab === 'comunicador' && (
+                <div className="space-y-6">
+
+                  <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-2">
+                    <h2 className="font-extrabold text-base text-white">Ecosistema SAAC y Biblioteca de Señas Puente</h2>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      Herramienta para dar voz inmediata a las necesidades de {perfil.nombrePersona} y biblioteca gestual para reducir la frustración comunicativa.
+                    </p>
+                  </div>
+
+                  {/* TABLERO DIGITAL DE VOZ */}
+                  <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4 shadow-lg">
+                    <h3 className="font-extrabold text-xs text-purple-300 uppercase tracking-widest">Tablero Interactivo de Sintesis de Voz</h3>
                     
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-3">
                       {[
-                        { emoji: '🍼', titulo: 'Leche', frase: 'Quiero mi leche por favor' },
-                        { emoji: '🚽', titulo: 'Baño', frase: 'Necesito ir al baño' },
-                        { emoji: '🛌', titulo: 'Dormir', frase: 'Tengo mucho sueño' },
-                        { emoji: '🧸', titulo: 'Jugar', frase: 'Quiero jugar con mis juguetes' },
-                        { emoji: '🫂', titulo: 'Abrazo', frase: 'Necesito un abrazo' },
-                        { emoji: '🛑', titulo: 'Parar / No', frase: 'No quiero más, por favor para' },
-                        { emoji: '🎵', titulo: 'Música', frase: 'Pon mi música favorita' },
-                        { emoji: '🌳', titulo: 'Paseo', frase: 'Quiero salir a dar un paseo' },
-                        { emoji: '✨', titulo: 'Más', frase: 'Quiero más de esto' }
+                        { emoji: '🍼', titulo: 'Agua / Bebida', frase: 'Tengo sed, quiero agua por favor' },
+                        { emoji: '🍎', titulo: 'Comer / Alimento', frase: 'Tengo hambre, quiero comer' },
+                        { emoji: '🚽', titulo: 'Ir al Baño', frase: 'Necesito ir al baño por favor' },
+                        { emoji: '🛋️', titulo: 'Descansar / Pausa', frase: 'Estoy cansado, necesito un momento de calma' },
+                        { emoji: '🫂', titulo: 'Abrazo / Afecto', frase: 'Necesito un abrazo' },
+                        { emoji: '🛑', titulo: 'Parar / No Quiero', frase: 'No quiero más de esto, por favor para' },
+                        { emoji: '🧸', titulo: 'Jugar / Actividad', frase: 'Quiero hacer una actividad' },
+                        { emoji: '🌳', titulo: 'Salir / Paseo', frase: 'Quiero salir al aire libre' },
+                        { emoji: '✨', titulo: 'Solicitar Más', frase: 'Por favor, quiero más de esto' }
                       ].map((p, idx) => (
                         <button 
                           key={idx}
-                          onClick={() => hablar(p.frase)}
-                          className="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-purple-50 hover:border-purple-300 active:scale-95 transition group"
+                          onClick={() => reproducirVoz(p.frase)}
+                          className="p-4 bg-slate-950 border border-slate-800 hover:border-purple-500/50 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-purple-950/40 transition active:scale-95 group"
                         >
                           <span className="text-4xl group-hover:scale-110 transition">{p.emoji}</span>
-                          <span className="font-extrabold text-xs text-slate-800">{p.titulo}</span>
+                          <span className="font-extrabold text-xs text-slate-200">{p.titulo}</span>
                         </button>
                       ))}
                     </div>
                   </div>
 
-                  {/* Biblioteca Baby Signs */}
-                  <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-                    <h3 className="font-extrabold text-xs text-slate-400 uppercase tracking-wider">Biblioteca de Baby Signs (Señas Puente)</h3>
+                  {/* BIBLIOTECA DE SEÑAS PUENTE */}
+                  <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4 shadow-lg">
+                    <h3 className="font-extrabold text-xs text-slate-400 uppercase tracking-widest">Biblioteca de Señas Puente (Gestualidad Funcional)</h3>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                      <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-1">
-                        <strong className="text-purple-700 font-bold block text-sm">Seña: "MÁS"</strong>
-                        <p className="text-slate-600 leading-relaxed">Juntar suavemente las yemas de los dedos de ambas manos frente al pecho varias veces.</p>
+                      <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1">
+                        <strong className="text-purple-300 font-bold block text-sm">Seña: "MÁS"</strong>
+                        <p className="text-slate-400 leading-relaxed">Juntar suavemente las yemas de los dedos de ambas manos frente al pecho dos o tres veces.</p>
                       </div>
-                      <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-1">
-                        <strong className="text-purple-700 font-bold block text-sm">Seña: "AGUA"</strong>
-                        <p className="text-slate-600 leading-relaxed">Formar la letra W con los dedos índice, medio y anular, realizando toques suaves en la barbilla.</p>
+                      <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1">
+                        <strong className="text-purple-300 font-bold block text-sm">Seña: "AGUA"</strong>
+                        <p className="text-slate-400 leading-relaxed">Formar la letra W con los dedos de la mano y dar toques suaves sobre la barbilla.</p>
+                      </div>
+                      <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1">
+                        <strong className="text-purple-300 font-bold block text-sm">Seña: "AYUDA"</strong>
+                        <p className="text-slate-400 leading-relaxed">Colocar el puño cerrado sobre la palma abierta de la otra mano y elevar ambas ligeramente.</p>
+                      </div>
+                      <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1">
+                        <strong className="text-purple-300 font-bold block text-sm">Seña: "CALMA / PARAR"</strong>
+                        <p className="text-slate-400 leading-relaxed">Colocar las palmas de ambas manos hacia abajo e impulsarlas suavemente hacia el suelo.</p>
                       </div>
                     </div>
                   </div>
@@ -543,21 +677,21 @@ Familia de ${perfil.nombreHijo}`;
                 </div>
               )}
 
-              {/* 5. BITÁCORA E INFORMES */}
+              {/* 7. BITÁCORA E INFORMES */}
               {activeTab === 'bitacora' && (
                 <div className="space-y-6">
 
-                  {/* Creador de notas */}
-                  <form onSubmit={agregarBitacora} className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-                    <h3 className="font-extrabold text-sm text-slate-800">Registrar Nueva Observación</h3>
+                  {/* REGISTRO DE NOTA */}
+                  <form onSubmit={guardarNota} className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4 shadow-lg">
+                    <h3 className="font-extrabold text-sm text-white">Registrar Observación Cualitativa</h3>
                     
                     <div className="flex gap-2 overflow-x-auto pb-1">
-                      {['Observación Física', 'Comunicación', 'Sensorial', 'Terapia'].map((cat) => (
+                      {['Observación Física', 'Autonomía Adulta / Habilidades', 'Sensorial', 'Comunicación'].map((cat) => (
                         <button
                           type="button"
                           key={cat}
-                          onClick={() => setCatNuevaNota(cat)}
-                          className={`text-xs font-bold px-3 py-1.5 rounded-xl whitespace-nowrap transition ${catNuevaNota === cat ? 'bg-purple-600 text-white' : 'bg-slate-100 text-slate-600'}`}
+                          onClick={() => setCatNota(cat)}
+                          className={`text-xs font-bold px-3.5 py-2 rounded-xl whitespace-nowrap transition ${catNota === cat ? 'bg-purple-600 text-white' : 'bg-slate-950 text-slate-400 border border-slate-800'}`}
                         >
                           {cat}
                         </button>
@@ -567,54 +701,48 @@ Familia de ${perfil.nombreHijo}`;
                     <textarea 
                       value={nuevaNota}
                       onChange={(e) => setNuevaNota(e.target.value)}
-                      placeholder={`Describe lo que notaste en ${perfil.nombreHijo} hoy (firmeza de pancita, uso del vaso, seña realizada)...`}
-                      className="w-full text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:border-purple-500 bg-slate-50 resize-none h-24"
+                      placeholder={`Registra detalles relevantes sobre ${perfil.nombrePersona} (ej. tono de la pancita por la mañana, respuesta ante el vertido de agua en el baño, decisiones tomadas independientemente)...`}
+                      className="w-full text-xs p-4 rounded-2xl border border-slate-800 focus:outline-none focus:border-purple-500 bg-slate-950 text-slate-100 resize-none h-28"
                     ></textarea>
 
-                    <button 
-                      type="submit"
-                      className="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs shadow-md transition"
-                    >
-                      + Guardar Registro
+                    <button type="submit" className="px-6 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs shadow-lg shadow-purple-900/40 transition">
+                      + Guardar Registro en Bitácora
                     </button>
                   </form>
 
-                  {/* INFORME SEMANAL LISTO PARA ESPECIALISTAS */}
-                  <div className="bg-gradient-to-br from-purple-900 to-indigo-950 p-6 rounded-2xl text-white space-y-3 shadow-lg">
+                  {/* GENERADOR DE INFORME PROFESIONAL */}
+                  <div className="bg-gradient-to-br from-purple-950 via-slate-900 to-slate-950 p-6 rounded-2xl border border-purple-800/50 space-y-4 shadow-xl">
                     <div className="flex justify-between items-center">
-                      <span className="bg-purple-500/30 text-purple-200 text-xs font-bold px-3 py-1 rounded-full uppercase border border-purple-400/30">
-                        Informe Semanal Consolidado
+                      <span className="bg-purple-900/60 text-purple-300 text-[10px] font-extrabold px-3 py-1 rounded-full border border-purple-700/50 uppercase tracking-widest">
+                        Informe Profesional Estructurado
                       </span>
-                      <span className="text-xs text-purple-300">Generado para la consulta</span>
+                      <button 
+                        onClick={() => copiarTexto(textoInformeEspecialista, 'informe')}
+                        className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs transition shadow-md"
+                      >
+                        {copiadoInforme ? '¡Copiado al Portapapeles! ✅' : '📋 Copiar Informe para Especialista'}
+                      </button>
                     </div>
 
-                    <h3 className="font-extrabold text-base">Resumen de Seguimiento para {perfil.nombreHijo}</h3>
-                    <p className="text-xs text-purple-200 leading-relaxed max-w-xl">
-                      Organizamos tus registros en un formato claro para optimizar el tiempo de diálogo con pediatras, terapeutas o educadores.
+                    <h3 className="font-extrabold text-base text-white">Resumen para Consulta Médica o Terapéutica</h3>
+                    <p className="text-xs text-slate-300 leading-relaxed max-w-2xl">
+                      Este documento compila de forma sintética los datos anotados en la bitácora y el estado en el mapa de pasos para optimizar el tiempo de consulta con pediatras, fisioterapeutas, neurólogos o educadores.
                     </p>
-
-                    <div className="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/10 text-xs space-y-2">
-                      <p className="font-bold text-purple-200">📌 Puntos Destacados para Consulta:</p>
-                      <ul className="list-disc pl-5 space-y-1 text-purple-100">
-                        <li>Firmeza abultada en la pancita observada durante el período matutino.</li>
-                        <li>Progreso en sellado labial y uso progresivo de la seña de "MÁS".</li>
-                      </ul>
-                    </div>
                   </div>
 
-                  {/* Historial */}
-                  <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-                    <h4 className="font-extrabold text-xs text-slate-400 uppercase tracking-wider">Historial de Registros</h4>
+                  {/* HISTORIAL */}
+                  <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3 shadow-lg">
+                    <h4 className="font-extrabold text-xs text-slate-400 uppercase tracking-widest">Historial de Observaciones</h4>
                     <div className="space-y-2">
                       {registros.map((item) => (
-                        <div key={item.id} className="p-3.5 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                        <div key={item.id} className="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
                           <div className="flex justify-between items-center text-xs">
-                            <span className="font-bold text-purple-700 bg-purple-100/60 px-2.5 py-0.5 rounded-md">
+                            <span className="font-bold text-purple-300 bg-purple-950 px-2.5 py-0.5 rounded-md border border-purple-800">
                               {item.categoria}
                             </span>
-                            <span className="text-slate-400 text-[11px]">{item.fecha}</span>
+                            <span className="text-slate-500 text-[11px]">{item.fecha}</span>
                           </div>
-                          <p className="text-xs text-slate-700 leading-relaxed">{item.nota}</p>
+                          <p className="text-xs text-slate-300 leading-relaxed pt-1">{item.nota}</p>
                         </div>
                       ))}
                     </div>
@@ -623,51 +751,57 @@ Familia de ${perfil.nombreHijo}`;
                 </div>
               )}
 
-              {/* 6. MARCO LEGAL Y PERFIL */}
+              {/* 8. MARCO LEGAL Y CONFIGURACIÓN DE PERFIL */}
               {activeTab === 'legal' && (
                 <div className="space-y-6">
 
-                  {/* Configuración */}
-                  <div className="bg-white p-6 rounded-2xl border border-slate-200 space-y-4 shadow-xs">
-                    <h3 className="font-extrabold text-sm text-slate-800">Perfil y Nombres Personalizados</h3>
+                  {/* PERFIL */}
+                  <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4 shadow-lg">
+                    <h3 className="font-extrabold text-sm text-white">Personalización del Perfil de {perfil.nombrePersona}</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                       <div>
-                        <label className="block font-bold text-slate-700 mb-1">Nombre del hijo/a:</label>
+                        <label className="block font-bold text-slate-300 mb-1">Nombre de la Persona (T21):</label>
                         <input 
                           type="text" 
-                          value={perfil.nombreHijo}
-                          onChange={(e) => setPerfil({ ...perfil, nombreHijo: e.target.value })}
-                          className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:outline-none focus:border-purple-500"
+                          value={perfil.nombrePersona}
+                          onChange={(e) => setPerfil({ ...perfil, nombrePersona: e.target.value })}
+                          className="w-full p-3 rounded-xl border border-slate-800 bg-slate-950 text-white focus:outline-none focus:border-purple-500"
                         />
                       </div>
                       <div>
-                        <label className="block font-bold text-slate-700 mb-1">¿Cómo quieres que te llamemos?:</label>
+                        <label className="block font-bold text-slate-300 mb-1">Nombre del Acompañante / Familiar:</label>
                         <input 
                           type="text" 
-                          value={perfil.nombreCuidador}
-                          onChange={(e) => setPerfil({ ...perfil, nombreCuidador: e.target.value })}
-                          className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:outline-none focus:border-purple-500"
+                          value={perfil.nombreAcompanante}
+                          onChange={(e) => setPerfil({ ...perfil, nombreAcompanante: e.target.value })}
+                          className="w-full p-3 rounded-xl border border-slate-800 bg-slate-950 text-white focus:outline-none focus:border-purple-500"
                         />
                       </div>
                     </div>
                   </div>
 
-                  {/* Carta Legal */}
-                  <div className="bg-emerald-950 p-6 rounded-2xl text-white space-y-3 shadow-lg">
-                    <span className="bg-emerald-800/60 text-emerald-200 text-xs font-bold px-3 py-1 rounded-full uppercase border border-emerald-700">
-                      Educación Inclusiva - LGE México
-                    </span>
-                    <h3 className="font-extrabold text-base">Solicitud Formal de Ajustes Razonables</h3>
-                    <p className="text-xs text-emerald-200 leading-relaxed max-w-xl">
-                      Fundamentado en los **Artículos 61 y 64 de la Ley General de Educación de México**, respaldando el derecho de {perfil.nombreHijo} a recibir adaptaciones educativas oportunas.
+                  {/* DOCUMENTO LEGAL Y DERECHOS */}
+                  <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4 shadow-lg">
+                    <div className="flex justify-between items-center flex-wrap gap-2">
+                      <span className="bg-emerald-950 text-emerald-300 text-[10px] font-extrabold px-3 py-1 rounded-full border border-emerald-800 uppercase tracking-widest">
+                        Respaldo Normativo LGE / CDPD
+                      </span>
+                      <button 
+                        onClick={() => copiarTexto(textoCartaLegal, 'legal')}
+                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition shadow-md"
+                      >
+                        {copiadoLegal ? '¡Carta Copiada! ✅' : '📋 Copiar Carta de Ajustes Razonables'}
+                      </button>
+                    </div>
+
+                    <h3 className="font-extrabold text-base text-white">Solicitud Formal de Ajustes Razonables</h3>
+                    <p className="text-xs text-slate-300 leading-relaxed">
+                      Texto listo para enviar a escuelas, centros ocupacionales o entidades comunitarias respaldado en los **Artículos 61 y 64 de la Ley General de Educación de México** y los **Artículos 19 y 24 de la Convención Internacional sobre los Derechos de las Personas con Discapacidad**.
                     </p>
 
-                    <button 
-                      onClick={copiarSolicitudLegal}
-                      className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl text-xs transition shadow-md flex items-center gap-2"
-                    >
-                      {copiado ? '¡Copiado al Portapapeles! ✅' : '📋 Copiar Carta Completa para Escuela / USAER'}
-                    </button>
+                    <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 text-xs font-mono text-slate-400 whitespace-pre-wrap leading-relaxed">
+                      {textoCartaLegal}
+                    </div>
                   </div>
 
                 </div>
@@ -680,7 +814,7 @@ Familia de ${perfil.nombreHijo}`;
       );
     }
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<AurelioCareApp />);
+    ReactDOM.createRoot(document.getElementById('root')).render(<AurelioApp />);
   </script>
 </body>
 </html>
